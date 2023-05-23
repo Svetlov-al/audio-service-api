@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Depends, UploadFile, File, Form  # Импорт основных классов FastAPI
+from fastapi import FastAPI, HTTPException, Depends, UploadFile, File, Form, status  # Импорт основных классов FastAPI
 from fastapi.responses import FileResponse  # Импорт класса FileResponse из модуля fastapi.responses для возможности возвращения файлов в ответах API
 from sqlalchemy.orm import Session  # Импорт сессии для работы с базой данных
 from sqlalchemy.exc import IntegrityError, NoResultFound  # Импорт класса ошибок для работы с базой данных
@@ -34,7 +34,7 @@ def get_db():
         db.close()  # Закрытие сессии
 
 
-@app.post("/create_user")  # Создание маршрута для создания пользователя
+@app.post("/create_user", status_code=status.HTTP_201_CREATED)  # Создание маршрута для создания пользователя
 def create_user(user_data: CreateUserRequest, db: Session = Depends(get_db)):  # Функция принимает имя пользователя и сессию базы данных
     uuid_token = str(uuid4())  # Генерация UUID токена
     new_user = User(  # Создание нового пользователя
@@ -50,7 +50,7 @@ def create_user(user_data: CreateUserRequest, db: Session = Depends(get_db)):  #
     return {"user_id": new_user.id, "uuid_token": new_user.uuid_token}  # Возвращение данных пользователя клиенту
 
 
-@app.post("/upload_audio")  # Создание маршрута для загрузки аудио файла
+@app.post("/upload_audio", status_code=status.HTTP_201_CREATED)  # Создание маршрута для загрузки аудио файла
 async def upload_audio(user_id: int = Form(...),  # Получаем идентификатор пользователя из формы
                        token: str = Form(...),  # Получаем токен пользователя из формы
                        file: UploadFile = File(...),  # Получаем файл для загрузки из формы
