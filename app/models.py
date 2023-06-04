@@ -1,12 +1,7 @@
 import uuid  # Импортируем модуль uuid для генерации UUID
-
 from sqlalchemy import Column, Integer, String, ForeignKey  # Импортируем классы Column, Integer, String, ForeignKey из модуля sqlalchemy
 from sqlalchemy.dialects.postgresql import UUID  # Импортируем класс UUID из модуля sqlalchemy.dialects.postgresql
-from sqlalchemy.ext.declarative import declarative_base  # Импортируем функцию declarative_base из модуля sqlalchemy.ext.declarative
-
-
-# Создаем базовый класс для всех моделей
-Base = declarative_base()
+from .database import Base
 
 
 class User(Base):

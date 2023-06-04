@@ -7,12 +7,12 @@ services:  # Определяет сервисы, которые будут за
     restart: always  # Политика перезапуска (всегда перезапускать)
     environment:  # Переменные окружения для контейнера
       POSTGRES_DB: postgres
-      POSTGRES_USER: root
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: root
     volumes:  # Сопоставление путей каталогов между хостом и контейнером
       - ./data/db:/var/lib/postgresql/data_audio  # Сохранение данных базы данных на хосте
     ports:  # Открытие портов
-      - "5432:5432"  # Сопоставление портов между хостом и контейнером
+      - "5433:5432"  # Сопоставление портов между хостом и контейнером
   pgadmin:  # Сервис - веб-интерфейс для управления базой данных
     container_name: audio_admin
     image: dpage/pgadmin4
@@ -25,7 +25,7 @@ services:  # Определяет сервисы, которые будут за
 
   web:  # Сервис - наше веб-приложение
     build: .  # Путь к Dockerfile, который будет использоваться для сборки образа (в той же директории, что и docker-compose.yml)
-    command: uvicorn main:app --host 0.0.0.0 --port 8000  # Команда, запускаемая в контейнере
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload # Команда, запускаемая в контейнере
     volumes:
       - .:/app  # Сопоставление каталогов
     ports:
